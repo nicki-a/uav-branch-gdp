@@ -27,21 +27,19 @@ flight_controller subsystem and once for the
 vision_system subsystem.
 * Each class instance subscribes to the relevant
 drone/[subsystem]/command MQTT topic and starts
-the MQTT client loop in seperate thread, (marked in
-purple in Figure 25). The looping status update thread
+the MQTT client loop in separate thread. The looping status update thread
 is also created (orange).
 * In the main thread, expected command names are reg-
 istered with each class, linked to handler functions. Fi-
 nally, class SystemControl is called.
-* SystemControl uses MQTTPublish (not shown in Fig-
-ure 25) to execute the flight test sequence. It first com-
+* SystemControl uses MQTTPublish to execute the flight test sequence. It first com-
 mands the Flight Control subsystem to take off to a
 specified relative altitude, by sending a message on the
 drone/flight_controller/command MQTT topic.
-* This is received by the MQTT client loop (purple)
+* This is received by the MQTT client loop
 in the MQTTCommsUnit(flight_controller) class in-
 stance, which spawns a command execution thread
-(green) that instructs FlightControl to send the cor-
+that instructs FlightControl to send the cor-
 responding MAVLink commands. Upon completion, a
 response is published on the command_response topic
 and the thread terminates.
@@ -52,8 +50,8 @@ frames. This is performed by sending a com-
 mand to the drone/vision_system/command topic
 which is received by the MQTT client loop in
 MQTTCommsUnit(vision_system).
-* The command runs in a new thread (green), and starts
-the video analysis loop thread (red) in VisionSystem.
+* The command runs in a new thread, and starts
+the video analysis loop thread in VisionSystem.
 * The video processing loop in VisionSystem anal-
 yses frames and generates differential velocity vec-
 tors. It publishes the movement command on
